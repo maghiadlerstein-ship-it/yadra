@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>💌 A Surprise for You</title>
+  <style>
+    /* ----- RESET & GLOBAL ----- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background: #f5f0e8; /* soft cream */
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      color: #2d3e2e;
+      background-image: radial-gradient(circle at 20% 30%, rgba(200, 220, 190, 0.3) 0%, transparent 40%),
+                        radial-gradient(circle at 80% 70%, rgba(180, 200, 170, 0.2) 0%, transparent 40%);
+      overflow-x: hidden;
+      transition: background 0.8s ease;
+    }
+
+    /* ----- MAIN CARD (mobile-first) ----- */
+    .card {
+      width: 100%;
+      max-width: 480px;
+      background: rgba(255, 255, 255, 0.55);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 40px;
+      padding: 30px 20px;
+      box-shadow: 0 20px 40px rgba(60, 70, 50, 0.12), 0 8px 20px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      text-align: center;
+      transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+      position: relative;
+      z-index: 5;
+      min-height: 300px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ----- SCREENS (hidden/visible) ----- */
+    .screen {
+      display: none;
+      width: 100%;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 22px;
+      animation: fadeSlide 0.7s ease forwards;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    @keyframes fadeSlide {
+      0% { opacity: 0; transform: translateY(16px) scale(0.98); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* ----- TYPOGRAPHY ----- */
+    h1, h2, h3 {
+      font-weight: 400;
+      letter-spacing: 0.5px;
+      line-height: 1.3;
+    }
+
+    .romantic-title {
+      font-size: 1.9rem;
+      color: #3e5a3e;
+      margin-bottom: 8px;
+      font-style: italic;
+      text-shadow: 0 2px 6px rgba(140, 170, 130, 0.2);
+    }
+
+    .romantic-sub {
+      font-size: 1.1rem;
+      color: #5a6e52;
+      margin-bottom: 14px;
+      font-style: italic;
+    }
+
+    /* ----- BUTTONS (large touch targets) ----- */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(145deg, #d9e8d4, #c0d6b8);
+      border: 1.5px solid rgba(255, 255, 255, 0.9);
+      color: #2b3e2b;
+      font-size: 1.3rem;
+      font-weight: 500;
+      padding: 18px 32px;
+      border-radius: 60px;
+      box-shadow: 0 8px 20px rgba(100, 130, 90, 0.2), 0 4px 10px rgba(0, 0, 0, 0.05), inset 0 -2px 0 rgba(0, 0, 0, 0.05);
+      cursor: pointer;
+      transition: all 0.25s ease;
+      width: 100%;
+      max-width: 320px;
+      min-height: 60px;
+      text-decoration: none;
+      font-family: inherit;
+      -webkit-appearance: none;
+      appearance: none;
+      touch-action: manipulation;
+      letter-spacing: 0.5px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn:active {
+      transform: scale(0.96);
+      background: linear-gradient(145deg, #c8ddc0, #b0cba6);
+      box-shadow: 0 4px 12px rgba(100, 130, 90, 0.25), inset 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .btn:focus-visible {
+      outline: 3px solid #7f9f7a;
+      outline-offset: 3px;
+    }
+
+    /* ----- YOUTUBE LINK (elegant, tappable) ----- */
+    .yt-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      padding: 14px 24px;
+      border-radius: 50px;
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 6px 16px rgba(80, 100, 70, 0.1);
+      color: #2e4a2e;
+      font-size: 1.1rem;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.25s ease;
+      width: 100%;
+      max-width: 320px;
+      min-height: 56px;
+      touch-action: manipulation;
+      word-break: break-word;
+    }
+
+    .yt-link:active {
+      background: rgba(255, 255, 255, 0.9);
+      transform: scale(0.97);
+    }
+
+    .yt-link:focus-visible {
+      outline: 3px solid #7f9f7a;
+      outline-offset: 3px;
+    }
+
+    .yt-icon {
+      font-size: 1.6rem;
+      line-height: 1;
+    }
+
+    /* ----- PHOTO (clickable, responsive) ----- */
+    .photo-wrapper {
+      width: 100%;
+      max-width: 360px;
+      aspect-ratio: 1 / 1;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 18px 30px -8px rgba(70, 90, 60, 0.3), 0 0 0 4px rgba(255, 255, 255, 0.5), 0 0 30px rgba(200, 220, 180, 0.6);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      touch-action: manipulation;
+      background: #d9e2d2;
+      position: relative;
+      margin: 8px 0;
+    }
+
+    .photo-wrapper:active {
+      transform: scale(0.97);
+      box-shadow: 0 10px 22px -6px rgba(70, 90, 60, 0.4), 0 0 0 4px rgba(255, 255, 255, 0.8), 0 0 40px rgba(200, 220, 180, 0.8);
+    }
+
+    .photo-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      pointer-events: none; /* tap goes to wrapper */
+    }
+
+    .photo-hint {
+      font-size: 0.95rem;
+      color: #5f7358;
+      margin-top: 6px;
+      font-style: italic;
+      letter-spacing: 0.3px;
+      opacity: 0.9;
+    }
+
+    /* ----- VIDEO ----- */
+    .video-wrapper {
+      width: 100%;
+      max-width: 420px;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 20px 35px -8px rgba(40, 50, 30, 0.3), 0 0 0 3px rgba(255, 255, 255, 0.6);
+      background: #000;
+      margin: 8px 0;
+    }
+
+    .video-wrapper video {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 24px;
+      background: #000;
+    }
+
+    /* ----- SURPRISE SCENE (balloons/bubbles) ----- */
+    .surprise-scene {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 100;
+      overflow: hidden;
+      display: none;
+    }
+
+    .surprise-scene.active {
+      display: block;
+    }
+
+    .balloon, .bubble, .heart-float, .sparkle {
+      position: absolute;
+      pointer-events: none;
+      will-change: transform, opacity;
+      animation-timing-function: ease-out;
+      animation-fill-mode: forwards;
+    }
+
+    /* Balloons */
+    .balloon {
+      width: 42px;
+      height: 52px;
+      background: radial-gradient(circle at 30% 30%, #f7d9d9, #e6b3b3);
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      box-shadow: 0 6px 14px rgba(180, 130, 130, 0.3);
+      animation: floatUp 6s linear forwards;
+    }
+
+    .balloon::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 14px;
+      background: #b9a6a6;
+      border-radius: 1px;
+    }
+
+    .balloon:nth-child(odd) {
+      background: radial-gradient(circle at 30% 30%, #d4e8d4, #a8c5a8);
+    }
+
+    .balloon:nth-child(3n) {
+      background: radial-gradient(circle at 30% 30%, #f0e0c0, #dbc8a0);
+    }
+
+    /* Bubbles */
+    .bubble {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.7), rgba(220, 240, 220, 0.2));
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 0 0 12px rgba(200, 220, 200, 0.3), inset 0 0 8px rgba(255, 255, 255, 0.5);
+      animation: floatUp 7s linear forwards;
+      backdrop-filter: blur(2px);
+    }
+
+    /* Hearts */
+    .heart-float {
+      font-size: 22px;
+      animation: floatUp 6.5s linear forwards;
+      filter: drop-shadow(0 4px 6px rgba(180, 120, 120, 0.25));
+    }
+
+    /* Sparkles */
+    .sparkle {
+      font-size: 16px;
+      animation: floatUp 5.5s linear forwards;
+      filter: drop-shadow(0 0 6px rgba(255, 240, 180, 0.8));
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(0deg) scale(1);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.9;
+      }
+      90% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-110vh) rotate(20deg) scale(0.8);
+        opacity: 0;
+      }
+    }
+
+    /* ----- SPARKLE/HEART BACKGROUND (subtle ambient) ----- */
+    .ambient-heart {
+      position: fixed;
+      pointer-events: none;
+      opacity: 0.15;
+      font-size: 20px;
+      animation: drift 18s infinite linear;
+      z-index: 0;
+    }
+
+    @keyframes drift {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.2; }
+      90% { opacity: 0.2; }
+      100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* ----- UTILITY ----- */
+    .hidden {
+      display: none !important;
+    }
+
+    .soft-glow {
+      text-shadow: 0 0 12px rgba(200, 220, 180, 0.8);
+    }
+
+    .mt-1 { margin-top: 6px; }
+    .mt-2 { margin-top: 14px; }
+
+    /* ----- SCROLLBAR (hidden for clean look) ----- */
+    ::-webkit-scrollbar {
+      width: 0;
+      background: transparent;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient floating hearts (background) -->
+  <div id="ambientContainer" aria-hidden="true"></div>
+
+  <!-- Surprise overlay for balloons/bubbles (filled by JS) -->
+  <div id="surpriseScene" class="surprise-scene" aria-hidden="true"></div>
+
+  <!-- MAIN CARD -->
+  <main class="card" id="mainCard">
+
+    <!-- STEP 1: OPEN IT -->
+    <section id="screen1" class="screen active" aria-label="Step 1: Open the surprise">
+      <div class="romantic-title" style="font-size: 2.2rem;">💌</div>
+      <h1 class="romantic-title">For you</h1>
+      <p class="romantic-sub">Something special is waiting…</p>
+      <button id="openBtn" class="btn" aria-label="Open the surprise">Open it 💌</button>
+    </section>
+
+    <!-- STEP 2: ROMANTIC MESSAGE + SONG -->
+    <section id="screen2" class="screen" aria-label="Step 2: Romantic message and song">
+      <h2 class="romantic-title" style="font-size: 1.8rem;">You make my heart smile</h2>
+      <p style="color: #4a5e42; font-size: 1.05rem; line-height: 1.6; font-style: italic; padding: 0 6px;">
+        Every moment with you feels like a beautiful melody.  
+        I picked this song just for you.
+      </p>
+      <a id="youtubeLink" class="yt-link" href="https://youtu.be/2aIjPlTL1gA?si=1AyMr-Rx_7N1OPp8" target="_blank" rel="noopener noreferrer" aria-label="Listen to our song on YouTube">
+        <span class="yt-icon">🎵</span> Listen to our song
+      </a>
+      <p class="photo-hint" style="margin-top: 10px;">tap the photo below 👇</p>
+    </section>
+
+    <!-- STEP 3: PHOTO -->
+    <section id="screen3" class="screen" aria-label="Step 3: Our photo">
+      <h2 class="romantic-title" style="font-size: 1.6rem;">Us</h2>
+      <div id="photoClickable" class="photo-wrapper" role="button" tabindex="0" aria-label="Tap to see a surprise">
+        <!-- FIXED PATH: image is in the same directory as index.html -->
+        <img src="./WhatsApp Image 2026-10-08 at 12.27.32.jpeg" alt="A romantic photo of us" loading="eager">
+      </div>
+      <p class="photo-hint">✨ tap the photo ✨</p>
+    </section>
+
+    <!-- STEP 5: SURPRISE MESSAGE (after balloons) -->
+    <section id="screen4" class="screen" aria-label="Step 5: Surprise message">
+      <h2 class="romantic-title" style="font-size: 1.8rem; line-height: 1.5;">Wait… I have one more thing for you ❤️</h2>
+      <button id="surpriseBtn" class="btn" style="font-size: 1.4rem; padding: 20px 28px;">Open your surprise 🎁</button>
+    </section>
+
+    <!-- STEP 6: VIDEO -->
+    <section id="screen5" class="screen" aria-label="Step 6: The video surprise">
+      <h2 class="romantic-title" style="font-size: 1.6rem;">A little something 🎬</h2>
+      <div class="video-wrapper">
+        <video controls playsinline preload="metadata" aria-label="A special video for you">
+          <!-- FIXED PATH: video is in the same directory as index.html -->
+          <source src="./WhatsApp Video 2026-10-08 at 12.27.33.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      <p class="photo-hint" style="opacity: 0.8;">press play ▶️</p>
+    </section>
+
+  </main>
+
+  <script>
+    (function() {
+      // ---------- DOM refs ----------
+      const screen1 = document.getElementById('screen1');
+      const screen2 = document.getElementById('screen2');
+      const screen3 = document.getElementById('screen3');
+      const screen4 = document.getElementById('screen4');
+      const screen5 = document.getElementById('screen5');
+      const openBtn = document.getElementById('openBtn');
+      const photoClickable = document.getElementById('photoClickable');
+      const surpriseBtn = document.getElementById('surpriseBtn');
+      const surpriseScene = document.getElementById('surpriseScene');
+      const youtubeLink = document.getElementById('youtubeLink');
+
+      // ---------- STATE ----------
+      let currentScreen = 1;
+      let isTransitioning = false;       // prevent double taps during animations
+      let surpriseTriggered = false;
+
+      // ---------- HELPER: switch screen with fade ----------
+      function goToScreen(n) {
+        if (isTransitioning) return;
+        if (n === currentScreen) return;
+        isTransitioning = true;
+
+        const screens = [screen1, screen2, screen3, screen4, screen5];
+        // Hide all
+        screens.forEach(s => s.classList.remove('active'));
+        // Show target
+        const target = screens[n - 1];
+        if (target) target.classList.add('active');
+        currentScreen = n;
+
+        // reset transitioning after animation frame + short delay
+        setTimeout(() => { isTransitioning = false; }, 650);
+      }
+
+      // ---------- STEP 1 → STEP 2 (open envelope) ----------
+      openBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (isTransitioning) return;
+        if (currentScreen !== 1) return;
+        goToScreen(2);
+      }, { passive: false });
+
+      // ---------- STEP 2: auto-advance to photo after delay ----------
+      function watchScreen2() {
+        if (currentScreen === 2) {
+          setTimeout(() => {
+            if (currentScreen === 2 && !isTransitioning) {
+              goToScreen(3);
+            }
+          }, 2200);
+        }
+      }
+
+      // patch goToScreen to trigger the watch
+      const originalGoToScreen = goToScreen;
+      goToScreen = function(n) {
+        originalGoToScreen(n);
+        if (n === 2) {
+          watchScreen2();
+        }
+      };
+      // rebind openBtn because goToScreen reference changed
+      openBtn.removeEventListener('click', function(){});
+      openBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (isTransitioning) return;
+        if (currentScreen !== 1) return;
+        goToScreen(2);
+      }, { passive: false });
+
+      // ---------- STEP 3 → STEP 4 (tap photo triggers surprise) ----------
+      function triggerSurprise() {
+        if (surpriseTriggered) return;
+        if (currentScreen !== 3) return;
+        surpriseTriggered = true;
+
+        // 1. Activate surprise scene overlay
+        surpriseScene.classList.add('active');
+
+        // 2. Generate balloons, bubbles, hearts, sparkles
+        createSurpriseElements();
+
+        // 3. After a short delay, show the surprise message screen (screen4)
+        setTimeout(() => {
+          goToScreen(4);
+          setTimeout(() => {
+            surpriseScene.classList.remove('active');
+            surpriseScene.innerHTML = '';
+          }, 2400);
+        }, 1800);
+      }
+
+      photoClickable.addEventListener('click', function(e) {
+        e.preventDefault();
+        triggerSurprise();
+      });
+
+      // Keyboard accessibility for photo
+      photoClickable.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          triggerSurprise();
+        }
+      });
+
+      // ---------- CREATE SURPRISE ELEMENTS ----------
+      function createSurpriseElements() {
+        const container = surpriseScene;
+        container.innerHTML = '';
+
+        const count = 32;
+
+        for (let i = 0; i < count; i++) {
+          const rand = Math.random();
+          let el;
+
+          if (rand < 0.35) {
+            el = document.createElement('div');
+            el.className = 'balloon';
+            const size = 28 + Math.random() * 24;
+            el.style.width = size + 'px';
+            el.style.height = (size * 1.25) + 'px';
+            el.style.left = Math.random() * 100 + '%';
+            el.style.bottom = '-15%';
+            el.style.animationDelay = (Math.random() * 1.5) + 's';
+            el.style.animationDuration = (5 + Math.random() * 4) + 's';
+            const hue = 340 + Math.random() * 20;
+            el.style.background = `radial-gradient(circle at 30% 30%, hsl(${hue}, 70%, 90%), hsl(${hue}, 60%, 80%))`;
+          } else if (rand < 0.65) {
+            el = document.createElement('div');
+            el.className = 'bubble';
+            const size = 14 + Math.random() * 28;
+            el.style.width = size + 'px';
+            el.style.height = size + 'px';
+            el.style.left = Math.random() * 100 + '%';
+            el.style.bottom = '-10%';
+            el.style.animationDelay = (Math.random() * 2) + 's';
+            el.style.animationDuration = (6 + Math.random() * 4) + 's';
+          } else if (rand < 0.85) {
+            el = document.createElement('div');
+            el.className = 'heart-float';
+            el.textContent = '❤️';
+            el.style.left = Math.random() * 100 + '%';
+            el.style.bottom = '-10%';
+            el.style.fontSize = (16 + Math.random() * 20) + 'px';
+            el.style.animationDelay = (Math.random() * 2) + 's';
+            el.style.animationDuration = (5 + Math.random() * 4) + 's';
+          } else {
+            el = document.createElement('div');
+            el.className = 'sparkle';
+            el.textContent = '✨';
+            el.style.left = Math.random() * 100 + '%';
+            el.style.bottom = '-10%';
+            el.style.fontSize = (12 + Math.random() * 18) + 'px';
+            el.style.animationDelay = (Math.random() * 2) + 's';
+            el.style.animationDuration = (5 + Math.random() * 4) + 's';
+          }
+
+          const leftVal = parseFloat(el.style.left);
+          if (leftVal > 95) el.style.left = '95%';
+          if (leftVal < 5) el.style.left = '5%';
+
+          container.appendChild(el);
+        }
+
+        for (let j = 0; j < 4; j++) {
+          const el = document.createElement('div');
+          el.className = 'balloon';
+          const size = 40 + Math.random() * 30;
+          el.style.width = size + 'px';
+          el.style.height = (size * 1.25) + 'px';
+          el.style.left = (10 + Math.random() * 80) + '%';
+          el.style.bottom = '-20%';
+          el.style.animationDelay = (Math.random() * 3) + 's';
+          el.style.animationDuration = (7 + Math.random() * 5) + 's';
+          el.style.opacity = '0.7';
+          el.style.background = `radial-gradient(circle at 30% 30%, #f5e6e6, #dfc0c0)`;
+          container.appendChild(el);
+        }
+      }
+
+      // ---------- STEP 5 → STEP 6 (surprise button to video) ----------
+      surpriseBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (isTransitioning) return;
+        if (currentScreen !== 4) return;
+        surpriseScene.classList.remove('active');
+        surpriseScene.innerHTML = '';
+        goToScreen(5);
+      }, { passive: false });
+
+      // ---------- AMBIENT BACKGROUND HEARTS ----------
+      function createAmbientHearts() {
+        const container = document.getElementById('ambientContainer');
+        for (let i = 0; i < 10; i++) {
+          const heart = document.createElement('div');
+          heart.className = 'ambient-heart';
+          heart.textContent = ['❤️', '✨', '💚', '🌸'][Math.floor(Math.random() * 4)];
+          heart.style.left = Math.random() * 100 + '%';
+          heart.style.bottom = '-10%';
+          heart.style.animationDelay = (Math.random() * 20) + 's';
+          heart.style.animationDuration = (16 + Math.random() * 16) + 's';
+          heart.style.fontSize = (14 + Math.random() * 18) + 'px';
+          heart.style.opacity = 0.1 + Math.random() * 0.1;
+          container.appendChild(heart);
+        }
+      }
+
+      // ---------- INIT ----------
+      createAmbientHearts();
+
+      // FIXED PATH: preload photo from same directory as index.html
+      const img = new Image();
+      img.src = './WhatsApp Image 2026-10-08 at 12.27.32.jpeg';
+
+      console.log('💌 Romantic surprise ready. Tap "Open it" to begin.');
+    })();
+  </script>
+</body>
+</html>
